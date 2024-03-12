@@ -57,11 +57,11 @@ const Auth = (props) => {
   return (
     <>
       <div className="main-content" ref={mainContent}>
-        <AuthNavbar />
+        {/* <AuthNavbar /> */}
         <div className="header bg-gradient-info py-7 py-lg-8">
           <Container>
             <div className="header-body text-center mb-7">
-              <Row className="justify-content-center">
+              {/* <Row className="justify-content-center">
                 <Col lg="5" md="6">
                   <h1 className="text-white">Welcome!</h1>
                   <p className="text-lead text-light">
@@ -69,7 +69,7 @@ const Auth = (props) => {
                     your project for free.
                   </p>
                 </Col>
-              </Row>
+              </Row> */}
             </div>
           </Container>
           <div className="separator separator-bottom separator-skew zindex-100">

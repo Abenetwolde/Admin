@@ -1,20 +1,5 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.2.4
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
@@ -34,7 +19,58 @@ import {
   Media,
 } from "reactstrap";
 
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setFirewalls,setSelectedFirewall } from "../../redux/firewallSlice";
+// import { setFirewalls, setSelectedFirewall } from "../.../redux/firewallSlice";
+
 const AdminNavbar = (props) => {
+  const dispatch = useDispatch();
+  const firewalls = useSelector((state) => state.firewall.firewalls);
+  const selectedFirewall = useSelector((state) => state.firewall.selectedFirewall);
+  const userToken = useSelector(state => state.auth.user);
+  const handleFirewallSelect = (firewall) => {
+    dispatch(setSelectedFirewall(firewall));
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://172.30.30.121:4000/webserver/get/organization', {
+          headers: {
+            Authorization: userToken,
+          },
+        });
+        dispatch(setFirewalls(response.data.response));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [dispatch, userToken]);
+  console.log("selected firwall...........",selectedFirewall)
+// Function to fetch data from the API
+// const fetchData = async () => {
+//   try {
+//     // Make API request with headers
+//     const response = await axios.get('http://172.30.30.121:4000/webserver/get/organization', {
+//       headers: {
+//         Authorization: userToken, // Add authorization header here
+//       },
+//     });
+//     // Extract firewall data from the response and update state
+//     setFirewalls(response.data.response);
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//   }
+// };
+// console.log("firewalls",firewalls)
+// console.log("firewalls",userToken)
+// console.log("selected",selectedFirewall)
+// // Use useEffect to fetch data when the component mounts
+// useEffect(() => {
+//   fetchData();
+// }, []); 
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -46,17 +82,24 @@ const AdminNavbar = (props) => {
             {props.brandText}
           </Link>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form>
+      <FormGroup className="mb-0">
+        <UncontrolledDropdown >
+          <DropdownToggle caret>
+          {selectedFirewall ? selectedFirewall.hostname : 'Select a Firewall'}
+          </DropdownToggle>
+          <DropdownMenu style={{ backgroundColor: "white", color: "black" }}>
+              {firewalls?.map(firewall => (
+                <DropdownItem
+                  key={firewall?.kibanaURL}
+                  onClick={() => handleFirewallSelect(firewall)}
+                >
+                  {firewall?.hostname}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+        </UncontrolledDropdown>
+      </FormGroup>
+    </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -64,12 +107,12 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                      src={"https://th.bing.com/th/id/R.7cc6700806813e7b59d4d99246153a31?rik=OAY9pMXChvkauw&pid=ImgRaw&r=0"}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      Admin
                     </span>
                   </Media>
                 </Media>
@@ -95,7 +138,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="#pablo" onClick={() => localStorage.removeItem("user")}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

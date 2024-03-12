@@ -22,6 +22,7 @@ import classnames from "classnames";
 import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
+
 // reactstrap components
 import {
   Button,
@@ -37,7 +38,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
-
+import { useSelector } from "react-redux";
 // core components
 import {
   chartOptions,
@@ -47,11 +48,12 @@ import {
 } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
+// import store from "redux/store";
 
 const Index = (props) => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
-
+  const selectedFirewall = useSelector((state) => state.firewall.selectedFirewall);
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
   }
@@ -67,17 +69,39 @@ const Index = (props) => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="mb-5 mb-xl-0" xl="8">
-            <Card className="bg-gradient-default shadow">
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card className="shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
                       Overview
                     </h6>
-                    <h2 className="text-white mb-0">Sales value</h2>
+                    <h2 className="text-blue mb-0">Attack Type</h2>
                   </div>
+                
+                </Row>
+              </CardHeader>
+              <CardBody>
+                {/* Chart */}
+                <div className="chart">
+                    <iframe src={selectedFirewall?.kibanaURL} height="100%" width="100%"></iframe>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col className="mb-5 mb-xl-0" xl="6">
+            <Card className="shadow">
+              <CardHeader className="bg-transparent">
+                <Row className="align-items-center">
                   <div className="col">
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
+                      Overview
+                    </h6>
+                    {/* <p>{selectedFirewall?.kibanaURL}</p> */}
+                    <h2 className="text-blue mb-0">Blocked Port</h2>
+                  </div>
+                  {/* <div className="col">
                     <Nav className="justify-content-end" pills>
                       <NavItem>
                         <NavLink
@@ -105,46 +129,20 @@ const Index = (props) => {
                         </NavLink>
                       </NavItem>
                     </Nav>
-                  </div>
+                  </div> */}
                 </Row>
               </CardHeader>
               <CardBody>
                 {/* Chart */}
                 <div className="chart">
-                  <Line
-                    data={chartExample1[chartExample1Data]}
-                    options={chartExample1.options}
-                    getDatasetAtEvent={(e) => console.log(e)}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col xl="4">
-            <Card className="shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                      Performance
-                    </h6>
-                    <h2 className="mb-0">Total orders</h2>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                {/* Chart */}
-                <div className="chart">
-                  <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
+                <iframe src="http://172.20.136.18:5602/app/kibana#/visualize/edit/9525ee10-df76-11ee-b14d-a92a935f5123?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-1y,to:now))&_a=(filters:!(),linked:!f,query:(language:kuery,query:''),uiState:(),vis:(aggs:!(),params:(expression:'.es(*)',interval:auto),title:Time_serious,type:timelion))" height="100%" width="100%"></iframe>
+                   {/* <iframe src="http://172.20.136.18:5601/app/kibana#/visualize/edit/034dbaa0-aa2d-11ee-beee-73bd96a81c70?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-1y,to:now))&_a=(filters:!(),linked:!f,query:(language:kuery,query:''),uiState:(),vis:(aggs:!((enabled:!t,id:'1',params:(),schema:metric,type:count),(enabled:!t,id:'2',params:(field:Msg.keyword,missingBucket:!f,missingBucketLabel:Missing,order:desc,orderBy:'1',otherBucket:!f,otherBucketLabel:Other,size:10),schema:segment,type:terms)),params:(addLegend:!t,addTooltip:!t,dimensions:(buckets:!((accessor:0,aggType:terms,format:(id:terms,params:(id:string,missingBucketLabel:Missing,otherBucketLabel:Other,parsedUrl:(basePath:'',origin:'http:%2F%2F172.20.136.18:5602',pathname:%2Fapp%2Fkibana))),label:'Msg.keyword:%20Descending',params:())),metric:(accessor:1,aggType:count,format:(id:number),label:Count,params:())),isDonut:!f,labels:(last_level:!t,show:!t,truncate:100,values:!t),legendPosition:right,type:pie),title:WafAttack1,type:pie))" height="100%" width="100%"></iframe> */}
                 </div>
               </CardBody>
             </Card>
           </Col>
         </Row>
-        <Row className="mt-5">
+        {/* <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="8">
             <Card className="shadow">
               <CardHeader className="border-0">
@@ -329,7 +327,7 @@ const Index = (props) => {
               </Table>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </>
   );
