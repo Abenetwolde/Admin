@@ -19,7 +19,30 @@ import React from "react";
 import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
-// core components
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardContent,
+  Collapse,
+  FormGroup,
+  FormControl,
+  Input,
+  InputAdornment,
+  InputLabel,
+  CssBaseline,
+  Box,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Drawer,
+  IconButton,
+  Typography,
+  Divider,
+  makeStyles,
+} from "@material-ui/core";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
@@ -49,9 +72,9 @@ const Admin = (props) => {
   };
 
   const getBrandText = (path) => {
-    for (let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < path.length; i++) {
       if (
-        props?.location?.pathname.indexOf(routes[i].layout + routes[i].path) !==
+        location?.pathname.indexOf(routes[i].layout + routes[i].path) !==
         -1
       ) {
         return routes[i].name;
@@ -62,6 +85,8 @@ const Admin = (props) => {
 
   return (
     <>
+     <Box sx={{ display: 'flex',flexGrow:1, width:'100%',}}>
+      {/* <CssBaseline /> */}
       <Sidebar
         {...props}
         routes={routes}
@@ -71,11 +96,12 @@ const Admin = (props) => {
           imgAlt: "...",
         }}
       />
-      <div className="main-content" ref={mainContent}>
+      <Box className="main-content" sx={{flexGrow:1, width:'100%',}} ref={mainContent}>
         <AdminNavbar
           {...props}
-          brandText={getBrandText(props?.location?.pathname)}
+          brandText={getBrandText(routes)}
         />
+          {/* <p>{location?.pathname}</p> */}
         <Routes>
           {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/admin/index" replace />} />
@@ -83,7 +109,8 @@ const Admin = (props) => {
         <Container fluid>
           <AdminFooter />
         </Container>
-      </div>
+      </Box>
+      </Box>
     </>
   );
 };

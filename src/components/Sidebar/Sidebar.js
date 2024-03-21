@@ -1,286 +1,120 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.4
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
 import { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-// nodejs library to set properties for components
-import { PropTypes } from "prop-types";
+import { NavLink as NavLinkRRD } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Box from '@mui/material/Box';
+import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 
-// reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Collapse,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Media,
-  NavbarBrand,
-  Navbar,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
 
-var ps;
-
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 const Sidebar = (props) => {
-  const [collapseOpen, setCollapseOpen] = useState();
-  // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
+
+
+  const drawerWidth = 240;
+  const location = useLocation();
+
+
+  const theme = useTheme();
+  const [open, setOpen] = useState(true);
+  const openedMixin = {
+    width: drawerWidth,
+    transition: 'width 0.3s ease-in-out',
+    overflowX: 'hidden',
   };
-  // toggles collapse between opened and closed (true/false)
-  const toggleCollapse = () => {
-    setCollapseOpen((data) => !data);
+  const StyledSidebarContainer = styled('div')({
+
+    transition: 'width 0.3s ease-in-out', // Transition effect
+    overflowX: 'hidden',
+    position: 'sticky',
+    top: 0,
+    height: '100vh',
+    overflowY: 'auto',// Allow scrolling if content overflows
+  });
+  const closedMixin = {
+    transition: 'width 0.3s ease-in-out',
+    overflowX: 'hidden',
+    width: '50px',
   };
-  // closes the collapse
-  const closeCollapse = () => {
-    setCollapseOpen(false);
+
+  const drawerHeaderStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '8px',
   };
-  // creates the links that appear in the left menu / Sidebar
+
+
+  const drawerStyle = (open) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ... (open ? openedMixin : closedMixin),
+  });
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(!open);
+  };
+
+
+
+
   const createLinks = (routes) => {
     return routes
-      .filter((route) => route.path !== "/login") // Exclude the login route
+      .filter((route) => route.path !== "/login")
       .map((prop, key) => {
+        const isActive = location.pathname.includes(prop.layout + prop.path);
+        const listItemStyle = {
+          // backgroundColor: isActive ? 'lightblue' : 'transparent',
+          borderLeft: isActive ? '2px solid blue' : 'none',
+        };
+
         return (
-          <NavItem key={key}>
-            <NavLink
-              to={prop.layout + prop.path}
-              tag={NavLinkRRD}
-              onClick={closeCollapse}
-            >
-              <i className={prop.icon} />
-              {prop.name}
-            </NavLink>
-          </NavItem>
+          <ListItem
+            button
+            component={NavLinkRRD}
+            to={prop.layout + prop.path}
+            key={key}
+            style={listItemStyle}
+          >
+            <ListItemIcon sx={{
+              minWidth: 0,
+              mr: open ? 3 : 'auto',
+              justifyContent: 'center',
+            }}>{prop.icon}</ListItemIcon>
+            <ListItemText primary={prop.name} sx={{ opacity: open ? 1 : 0 }} />
+          </ListItem>
         );
       });
   };
-  
-
-  const { bgColor, routes, logo } = props;
-  let navbarBrandProps;
-  if (logo && logo.innerLink) {
-    navbarBrandProps = {
-      to: logo.innerLink,
-      tag: Link,
-    };
-  } else if (logo && logo.outterLink) {
-    navbarBrandProps = {
-      href: logo.outterLink,
-      target: "_blank",
-    };
-  }
+  const { routes, logo } = props;
 
   return (
-    <Navbar
-      className="navbar-vertical fixed-left navbar-light bg-white"
-      expand="md"
-      id="sidenav-main"
-    >
-      <Container fluid>
-        {/* Toggler */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          onClick={toggleCollapse}
-        >
-          toggle
-          <span className="navbar-toggler-icon" />
-        </button>
-        {/* Brand */}
-        {logo ? (
-          <NavbarBrand className="pt-0  mb-0 align-items-center " {...navbarBrandProps}>
-            <div className=" align-items-center"style={{ marginTop: '0px !important', marginBottom: '10px', width: "100%", height: "100%",  }}>
-            <img
-              alt={"https://th.bing.com/th/id/OIP.kr8GbP9Wrspilxs7xvPBSgAAAA?rs=1&pid=ImgDetMain"}
-          
-              src={"https://th.bing.com/th/id/OIP.kr8GbP9Wrspilxs7xvPBSgAAAA?rs=1&pid=ImgDetMain"}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-            </div>
+    <StyledSidebarContainer style={drawerStyle(open)}>
+      <div>
+        <div style={drawerHeaderStyle}>
+          <img src={"https://scontent.fadd2-1.fna.fbcdn.net/v/t39.30808-6/309594003_479073510925896_4418903135455341959_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=X3yeRAplDhQAX_93WQE&_nc_ht=scontent.fadd2-1.fna&oh=00_AfBNzUyiG_gxdU5odv7PCOZ-fQsjcks-jCLArsVItRO81Q&oe=6601F8C8"} alt="Logo" style={{ marginRight: '8px', height: '30px' }} />
+          <IconButton onClick={handleDrawerClose}>
+            {open ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        {createLinks(routes)}
 
-            <p>INSA-WAF</p>
-            
-   <hr className="my-0" />
-          </NavbarBrand>
-        ) : null}
-         
-        {/* User */}
-        <Nav className="align-items-center d-md-none">
-        {/* <hr className="my-3" /> */}
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
-            <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
-              right
-            >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav>
-             
-            </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-arrow" right>
-              <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-single-02" />
-                <span>My profile</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-support-16" />
-                <span>Support</span>
-              </DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={() => localStorage.removeItem("user")}>
-                <i className="ni ni-user-run" />
-                <span>Logout</span>
-              </DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </Nav>
-        {/* Collapse */}
-        <Collapse navbar isOpen={collapseOpen}>
-          {/* Collapse header */}
-          <div className="navbar-collapse-header d-md-none">
-            <Row>
-            
-              <Col className="collapse-close" xs="6">
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  onClick={toggleCollapse}
-                >
-                  <span />
-                  <span />
-                </button>
-              </Col>
-            </Row>
-          </div>
-          {/* Form */}
-          {/* <Form className="mt-4 mb-3 d-md-none">
-            <InputGroup className="input-group-rounded input-group-merge">
-              <Input
-                aria-label="Search"
-                className="form-control-rounded form-control-prepended"
-                placeholder="Search"
-                type="search"
-              />
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <span className="fa fa-search" />
-                </InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Form> */}
-          {/* Navigation */}
-          <Nav navbar>{createLinks(routes)}</Nav>
-          {/* Divider */}
-        
-          {/* Heading */}
-          {/* <h6 className="navbar-heading text-muted">Documentation</h6> */}
-          {/* Navigation */}
-          {/* <Nav className="mb-md-3" navbar>
-            <NavItem>
-              <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/overview?ref=adr-admin-sidebar">
-                <i className="ni ni-spaceship" />
-                Getting started
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/colors?ref=adr-admin-sidebar">
-                <i className="ni ni-palette" />
-                Foundation
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/#/documentation/alerts?ref=adr-admin-sidebar">
-                <i className="ni ni-ui-04" />
-                Components
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <Nav className="mb-md-3" navbar>
-            <NavItem className="active-pro active">
-              <NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=adr-admin-sidebar">
-                <i className="ni ni-spaceship" />
-                Upgrade to PRO
-              </NavLink>
-            </NavItem>
-          </Nav> */}
-        </Collapse>
-      </Container>
-    </Navbar>
+      </div>
+
+    </StyledSidebarContainer>
   );
-};
-
-Sidebar.defaultProps = {
-  routes: [{}],
-};
-
-Sidebar.propTypes = {
-  // links that will be displayed inside the component
-  routes: PropTypes.arrayOf(PropTypes.object),
-  logo: PropTypes.shape({
-    // innerLink is for links that will direct the user within the app
-    // it will be rendered as <Link to="...">...</Link> tag
-    innerLink: PropTypes.string,
-    // outterLink is for links that will direct the user outside the app
-    // it will be rendered as simple <a href="...">...</a> tag
-    outterLink: PropTypes.string,
-    // the image src of the logo
-    imgSrc: PropTypes.string.isRequired,
-    // the alt for the img
-    imgAlt: PropTypes.string.isRequired,
-  }),
 };
 
 export default Sidebar;

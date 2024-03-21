@@ -1,5 +1,5 @@
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
@@ -21,7 +21,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { setFirewalls,setSelectedFirewall } from "../../redux/firewallSlice";
+import { setFirewalls, setSelectedFirewall } from "../../redux/firewallSlice";
 // import { setFirewalls, setSelectedFirewall } from "../.../redux/firewallSlice";
 
 const AdminNavbar = (props) => {
@@ -48,29 +48,29 @@ const AdminNavbar = (props) => {
 
     fetchData();
   }, [dispatch, userToken]);
-  console.log("selected firwall...........",selectedFirewall)
-// Function to fetch data from the API
-// const fetchData = async () => {
-//   try {
-//     // Make API request with headers
-//     const response = await axios.get('http://172.30.30.121:4000/webserver/get/organization', {
-//       headers: {
-//         Authorization: userToken, // Add authorization header here
-//       },
-//     });
-//     // Extract firewall data from the response and update state
-//     setFirewalls(response.data.response);
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//   }
-// };
-// console.log("firewalls",firewalls)
-// console.log("firewalls",userToken)
-// console.log("selected",selectedFirewall)
-// // Use useEffect to fetch data when the component mounts
-// useEffect(() => {
-//   fetchData();
-// }, []); 
+  console.log("selected firwall...........", selectedFirewall)
+  // Function to fetch data from the API
+  // const fetchData = async () => {
+  //   try {
+  //     // Make API request with headers
+  //     const response = await axios.get('http://172.30.30.121:4000/webserver/get/organization', {
+  //       headers: {
+  //         Authorization: userToken, // Add authorization header here
+  //       },
+  //     });
+  //     // Extract firewall data from the response and update state
+  //     setFirewalls(response.data.response);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
+  // console.log("firewalls",firewalls)
+  // console.log("firewalls",userToken)
+  // console.log("selected",selectedFirewall)
+  // // Use useEffect to fetch data when the component mounts
+  // useEffect(() => {
+  //   fetchData();
+  // }, []); 
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -82,24 +82,24 @@ const AdminNavbar = (props) => {
             {props.brandText}
           </Link>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-      <FormGroup className="mb-0">
-        <UncontrolledDropdown >
-          <DropdownToggle caret>
-          {selectedFirewall ? selectedFirewall.hostname : 'Select a Firewall'}
-          </DropdownToggle>
-          <DropdownMenu style={{ backgroundColor: "white", color: "black" }}>
-              {firewalls?.map(firewall => (
-                <DropdownItem
-                  key={firewall?.kibanaURL}
-                  onClick={() => handleFirewallSelect(firewall)}
-                >
-                  {firewall?.hostname}
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-        </UncontrolledDropdown>
-      </FormGroup>
-    </Form>
+            <FormGroup className="mb-0">
+              <UncontrolledDropdown >
+                <DropdownToggle caret>
+                  {selectedFirewall ? selectedFirewall.hostname : 'Select a Firewall'}
+                </DropdownToggle>
+                <DropdownMenu style={{ backgroundColor: "white", color: "black" }}>
+                  {firewalls?.map(firewall => (
+                    <DropdownItem
+                      key={firewall?.kibanaURL}
+                      onClick={() => handleFirewallSelect(firewall)}
+                    >
+                      {firewall?.hostname}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </FormGroup>
+          </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>

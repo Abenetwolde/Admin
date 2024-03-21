@@ -17,29 +17,29 @@
 */
 import Index from "views/Index.js";
 import Profile from "views/examples/Profile.js";
-
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import Login from "views/examples/Login.js";
-
-
+import AddAlertIcon from '@mui/icons-material/AddAlert';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 var routes = [
   {
     path: "/index",
     name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
+    icon: <DashboardIcon/>,
     component: <Index />,
     layout: "/admin",
   },
   {
     path: "/alert",
     name: "Alerts",
-    icon: "ni ni-tv-2 text-primary",
+    icon: <AddAlertIcon/>,
     component: <Index />,
     layout: "/admin",
   },
   {
     path: "/admins",
     name: "Admins",
-    icon: "ni ni-tv-2 text-primary",
+    icon: <AdminPanelSettingsIcon/>,
     component: <Index />,
     layout: "/admin",
   },
