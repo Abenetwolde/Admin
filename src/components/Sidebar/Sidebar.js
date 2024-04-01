@@ -27,6 +27,7 @@ const Sidebar = (props) => {
     width: drawerWidth,
     transition: 'width 0.3s ease-in-out',
     overflowX: 'hidden',
+
   };
   const StyledSidebarContainer = styled('div')({
 
@@ -46,8 +47,10 @@ const Sidebar = (props) => {
   const drawerHeaderStyle = {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between', // Center the image and put the arrow icon on the right
     padding: '8px',
+   
+
   };
 
 
@@ -56,6 +59,7 @@ const Sidebar = (props) => {
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
+    backgroundColor: 'white',
     ... (open ? openedMixin : closedMixin),
   });
   const handleDrawerOpen = () => {
@@ -102,8 +106,17 @@ const Sidebar = (props) => {
   return (
     <StyledSidebarContainer style={drawerStyle(open)}>
       <div>
+
         <div style={drawerHeaderStyle}>
-          <img src={"https://scontent.fadd2-1.fna.fbcdn.net/v/t39.30808-6/309594003_479073510925896_4418903135455341959_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=X3yeRAplDhQAX_93WQE&_nc_ht=scontent.fadd2-1.fna&oh=00_AfBNzUyiG_gxdU5odv7PCOZ-fQsjcks-jCLArsVItRO81Q&oe=6601F8C8"} alt="Logo" style={{ marginRight: '8px', height: '30px' }} />
+          <div>
+
+          </div>
+          {/* Centered image */}
+          {open ? <div style={{ alignItems: "center", justifyContent: "center" }}>
+            <img src={"https://scontent.fadd2-1.fna.fbcdn.net/v/t39.30808-6/309594003_479073510925896_4418903135455341959_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=X3yeRAplDhQAX_93WQE&_nc_ht=scontent.fadd2-1.fna&oh=00_AfBNzUyiG_gxdU5odv7PCOZ-fQsjcks-jCLArsVItRO81Q&oe=6601F8C8"} alt="Logo" style={{ height: '80px' }} />
+            {/* <p>INSA WAF</p> */}
+          </div> : null}
+
           <IconButton onClick={handleDrawerClose}>
             {open ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
           </IconButton>
